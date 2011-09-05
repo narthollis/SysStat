@@ -22,14 +22,20 @@ class Dispatcher(StreamRequestHandler):
 
     # Find out who the client claims to be
     (junk, identifier) = self.data.split(b' ')
-    self.log("%s identified as %s" % (self.client_address[0], identifier.decode()))
+    
+       
+    self.log("%s identified as %s" % (
+                                        self.client_address[0],
+                                        identifier.decode())
+                                      )
 
     # Recieve the access code, fail if its wrong or if the cleint didnt ident
     # with as a valid client
     self.data = self.rfile.readline().strip()
 
     try:
-      if not self.server.config.get('authorization', identifier.decode()) == self.data.decode():
+      if not self.server.config.get('authorization', identifier.decode()) == \
+             self.data.decode():
         return
     except NoOptionError:
       return
@@ -61,7 +67,10 @@ class Dispatcher(StreamRequestHandler):
           self.wfile.write(b'ERROR 100 --- UNKNOWN MODULE\n')
           self.wfile.flush()
       elif self.data.startswith(b'LIST'):
-        (junk, item) = self.data.split(b' ')
+        try:
+          (junk, item) = self.data.split(b' ')
+        except ValueError:
+          self.wfile.write(b'ERROR 200 --- UNKNOWN LIST\n')
         if item == b'ALL':
           boundry = self.boundry(b'list all')
 
