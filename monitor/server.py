@@ -20,7 +20,7 @@ class Server(socketserver.TCPServer):
                                     bind_and_activate=False)
 
     if config.getboolean('ssl', 'use'):
-      self.socket = ssl.wrap_socket(self.socket, 
+      self.socket = ssl.wrap_socket(self.socket,
                                     certfile = self.config.get('ssl', 'cert'),
                                     keyfile  = self.config.get('ssl', 'key'),
                                     ssl_version=ssl.PROTOCOL_TLSv1)
@@ -36,12 +36,12 @@ class Server(socketserver.TCPServer):
 
     if self.config.getboolean('modules', 'disk'):
       from sensors.disk import Disk
-      self.modules['disk'] = Disk(self.config) 
+      self.modules['disk'] = Disk(self.config)
 
     if self.config.getboolean('modules', 'interface'):
       from sensors.interface import Interface
       self.modules['interface'] = Interface(self.config)
-    
+
     if self.config.getboolean('modules', 'memory'):
       from sensors.memory import Memory
       self.modules['memory'] = Memory(self.config)

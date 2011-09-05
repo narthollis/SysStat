@@ -3,7 +3,7 @@ class Error(Exception):
   code    = None
   name    = None
   message = None
-  
+
   def __str__(self):
     return "ERROR: %s %s\n%s" % (
               self.code.decode(),
@@ -20,12 +20,12 @@ class UnknownModule(Error):
   code    = b"100"
   name    = b"UNKNOWN MODULE"
   message = b"The requested module can not be found."
-  
+
 class UnknownList(Error):
   code    = b"200"
   name    = b"UNKNOWN LIST"
   message = b"The requested list could not be found."
-  
+
 class ListNotSupported(Error):
   code    = b"210"
   name    = b"LIST NOT SUPPORTED"
@@ -37,3 +37,4 @@ __all__ = [
   UnknownList,
   ListNotSupported
 ]
+

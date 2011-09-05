@@ -6,7 +6,7 @@ from datetime import datetime
 class Dispatcher(StreamRequestHandler):
   def log(self, msg):
     print("%s %s" % (datetime.now().isoformat(), msg))
-  
+
   def boundry(self, item):
     data = "%s-%s-%s" % (datetime.now(), self.client_address[0], item.decode())
 
@@ -22,8 +22,8 @@ class Dispatcher(StreamRequestHandler):
 
     # Find out who the client claims to be
     (junk, identifier) = self.data.split(b' ')
-    
-       
+
+
     self.log("%s identified as %s" % (
                                         self.client_address[0],
                                         identifier.decode())
@@ -45,18 +45,18 @@ class Dispatcher(StreamRequestHandler):
 
     while self.active:
       self.data = self.rfile.readline().strip()
-      
+
       if self.data == b'CLOSE': return
       elif self.data.startswith(b'GET'):
         (junk, item) = self.data.split(b' ')
-        
+
         key = item.decode().lower()
         if key in self.server.modules.keys():
           self.server.modules[key].reset()
           self.server.modules[key].run()
 
           boundry = self.boundry(item)
-          
+
           response = "SENDING %s ----%s----\n" % (key, boundry)
           response+= "%s" % (self.server.modules[key],)
           response+= "\n----%s---- FINISHED\n" % (boundry, )
@@ -82,7 +82,7 @@ class Dispatcher(StreamRequestHandler):
           self.wfile.flush()
         elif item.decode().lower() in self.server.modules.keys():
           boundry = self.boundry(('list %s' % item).encode())
-          
+
           key = item.decode().lower()
 
           try:
@@ -101,4 +101,3 @@ class Dispatcher(StreamRequestHandler):
       else:
         self.wfile.write(b'ERROR 000 -- UNKNOWN COMMAND\n')
         self.wfile.flush()
-

@@ -24,7 +24,7 @@ if __name__ == "__main__":
                       help="Path to the config file")
 
   args = parser.parse_args()
-    
+
   if not args.config:
     config_path = os.path.realpath(os.getenv('SYSSTAT', sys.path[0])) + os.sep
   else:
